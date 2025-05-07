@@ -1,4 +1,5 @@
 // import type { Metadata } from "next";
+import Footer from "./components/Footer/page";
 import Nav from "./components/Nav/page";
 import "./globals.css";
 import { Poppins } from "next/font/google";
@@ -26,6 +27,7 @@ export default function RootLayout({
       >
         <Nav />
         {children}
+        <Footer />
       </body>
     </html>
   );
