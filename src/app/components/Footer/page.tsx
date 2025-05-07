@@ -5,11 +5,6 @@ import Link from "next/link";
 export default function Footer() {
     return (
         <footer className="py-12 px-6 border-t border-gray-800 relative z-10 bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white">
-            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-800/15 via-purple-700/15 to-pink-600/15 opacity-40 blur-3xl pointer-events-none z-0" />
-            <div className="absolute bottom-[-50px] right-[-50px] w-[300px] h-[300px] bg-indigo-700 rounded-full blur-3xl opacity-20 pointer-events-none" />
-            <div className="absolute top-[-80px] left-[-80px] w-[250px] h-[250px] bg-pink-600 rounded-full blur-3xl opacity-20 pointer-events-none" />
-            <div className="absolute top-1/2 left-1/4 w-[150px] h-[150px] bg-purple-500 rounded-full blur-3xl opacity-15 pointer-events-none" />
-
             <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
                     <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent">PortfólioPro</h3>
