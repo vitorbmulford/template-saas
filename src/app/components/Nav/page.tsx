@@ -40,11 +40,13 @@ export default function Nav() {
             Dashboard
           </Link>
         </li>
-        <li>
-          <Link href="/perfil" className="hover:text-indigo-400 transition-colors">
-            Perfil
-          </Link>
-        </li>
+        {session && (
+          <li>
+            <Link href="/perfil" className="hover:text-indigo-400 transition-colors">
+              Perfil
+            </Link>
+          </li>
+        )}
 
         {session ? (
           <li className="flex items-center gap-2">
