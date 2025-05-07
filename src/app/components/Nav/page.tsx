@@ -8,10 +8,22 @@ import type { Session } from "next-auth";
 
 export default function Nav() {
   const [session, setSession] = useState<Session | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getSession().then((sess) => setSession(sess));
+    getSession()
+      .then((sess) => setSession(sess))
+      .finally(() => setIsLoading(false));
   }, []);
+
+  if (isLoading) {
+    return (
+      <nav className="w-full fixed top-0 left-0 z-50 px-8 py-4 bg-black/30 backdrop-blur-sm text-white flex justify-between items-center border-b border-gray-700">
+        <h1 className="text-xl font-bold">Template SaaS</h1>
+        <div className="w-8 h-8 rounded-full bg-gray-700 animate-pulse"></div>
+      </nav>
+    );
+  }
 
   return (
     <nav className="w-full fixed top-0 left-0 z-50 px-8 py-4 bg-black/30 backdrop-blur-sm text-white flex justify-between items-center border-b border-gray-700">
@@ -43,6 +55,7 @@ export default function Nav() {
                 width={32}
                 height={32}
                 className="rounded-full border border-gray-500"
+                priority
               />
             )}
             <span className="text-sm font-medium">{session.user?.name}</span>
