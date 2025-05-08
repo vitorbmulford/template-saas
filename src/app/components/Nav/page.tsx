@@ -40,28 +40,22 @@ export default function Nav() {
             Dashboard
           </Link>
         </li>
-        {session && (
-          <li>
-            <Link href="/perfil" className="hover:text-indigo-400 transition-colors">
-              Perfil
+        {session ? (
+          <li className="flex flex-col items-center gap-1">
+            <Link href="/perfil" className="flex flex-col items-center hover:text-indigo-400 transition-colors">
+              {session.user?.image && (
+                <Image
+                  src={session.user.image}
+                  alt="Avatar"
+                  width={32}
+                  height={32}
+                  className="rounded-full border border-gray-500 "
+                  priority
+                />
+              )}
             </Link>
           </li>
-        )}
 
-        {session ? (
-          <li className="flex items-center gap-2">
-            {session.user?.image && (
-              <Image
-                src={session.user.image}
-                alt="Avatar"
-                width={32}
-                height={32}
-                className="rounded-full border border-gray-500"
-                priority
-              />
-            )}
-            <span className="text-sm font-medium">{session.user?.name}</span>
-          </li>
         ) : (
           <li>
             <Link
