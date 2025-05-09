@@ -19,7 +19,7 @@ export async function getOrCreateCustomer(userId: string, userEmail: string) {
 
     const userName = userDoc.data()?.name;
 
-    const stripeCustmer = await stripe.customers.create({
+    const stripeCustomer = await stripe.customers.create({
       email: userEmail,
       ...(userName ? { name: userName } : {}),
       metadata: {
@@ -28,8 +28,10 @@ export async function getOrCreateCustomer(userId: string, userEmail: string) {
     });
 
     await userRef.update({
-      stripeCustomerId: stripeCustmer,
+      stripeCustomerId: stripeCustomer.id,
     });
+
+    return stripeCustomer.id; 
   } catch (error) {
     console.log(error);
     return null;
