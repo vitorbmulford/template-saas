@@ -13,7 +13,10 @@ export function useStripe() {
     }
     loadStripeAsync();
   }, []);
-  async function createPaymentStripeCheckout(checkoutData: undefined) {
+  async function createPaymentStripeCheckout(checkoutData: {
+    testeId: string;
+    userEmail?: string;
+  }) {
     if (!stripe) return;
 
     try {
@@ -24,14 +27,19 @@ export function useStripe() {
         },
         body: JSON.stringify(checkoutData),
       });
+      console.log("Response status:", response.status);
       const data = await response.json();
 
-      await stripe.redirectToCheckout({ sessionId: data.id });
+      await stripe.redirectToCheckout({ sessionId: data.sessionId });
     } catch (error) {
       console.error(error);
     }
   }
-  async function createSubscriptionStripeCheckcout(checkoutData: undefined) {
+
+  async function createSubscriptionStripeCheckout(checkoutData: {
+    testeId: string;
+    userEmail?: string;
+  }) {
     if (!stripe) return;
 
     try {
@@ -44,11 +52,12 @@ export function useStripe() {
       });
       const data = await response.json();
 
-      await stripe.redirectToCheckout({ sessionId: data.id });
+      await stripe.redirectToCheckout({ sessionId: data.sessionId });
     } catch (error) {
       console.error(error);
     }
   }
+
   async function handleCreateStripePortal() {
     const response = await fetch("/api/stripe/create-portal", {
       method: "POST",
@@ -61,7 +70,7 @@ export function useStripe() {
   }
   return {
     createPaymentStripeCheckout,
-    createSubscriptionStripeCheckcout,
+    createSubscriptionStripeCheckout,
     handleCreateStripePortal,
   };
 }

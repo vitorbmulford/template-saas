@@ -22,15 +22,20 @@ export async function POST(req: NextRequest) {
       ],
       mode: "payment",
       payment_method_types: ["card", "boleto"],
-      customer: testeId,
       success_url: `${req.headers.get("origin")}/success`,
       cancel_url: `${req.headers.get("origin")}/`,
       ...(userEmail && { customer_email: userEmail }),
       metadata,
     });
+    if (!sessions) {
+      return NextResponse.json({ error: "Session not found" }, { status: 500 });
+    }
     return NextResponse.json({ sessionId: sessions.id }, { status: 200 });
   } catch (error) {
     console.error("Error creating checkout session:", error);
-    return NextResponse.error();
+    return NextResponse.json(
+      { error: "Failed to create checkout session" },
+      { status: 500 }
+    );
   }
 }

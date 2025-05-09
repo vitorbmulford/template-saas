@@ -1,17 +1,23 @@
 "use client";
 
+import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import Link from "next/link";
+import { GooeyText } from "@/components/ui/gooey-text-morphing";
 
 export default function Hero() {
-
     return (
-        <>
-            <section className="flex flex-col items-center justify-center py-20 px-6 text-center relative z-10">
+        <BackgroundGradientAnimation>
+            <section className="flex flex-col items-center justify-center py-20 px-6 text-center">
                 <div className="max-w-4xl">
-                    <h1 className="text-5xl md:text-7xl font-extrabold mt-16 mb-6 bg-gradient-to-r from-indigo-400 via-pink-500 to-purple-500 bg-clip-text text-transparent leading-tight">
-                        Dê vida ao seu trabalho com um portfólio deslumbrante
-                    </h1>
-                    <p className="text-xl md:text-2xl text-gray-300 mb-10 leading-relaxed">
+                    <div className="h-[200px] flex items-center justify-center font-extrabold mt-16 mb-6">
+                        <GooeyText
+                            texts={["Crie", "seu", "pórtifolio"]}
+                            morphTime={1}
+                            cooldownTime={0.45}
+                            textClassName="font-extrabold mt-16 mb-6 bg-gradient-to-r from-indigo-400 via-pink-500 to-purple-500 bg-clip-text text-transparent leading-tight"
+                        />
+                    </div>
+                    <p className="text-xl md:text-2xl text-gray-200 mb-10 leading-relaxed">
                         Transforme sua criatividade em uma experiência digital impressionante. Nosso construtor de portfólios combina design elegante, desempenho excepcional e ferramentas poderosas para destacar seu trabalho.
                     </p>
 
@@ -45,6 +51,6 @@ export default function Hero() {
                     </div>
                 </div>
             </section>
-        </>
+        </BackgroundGradientAnimation>
     );
 }
