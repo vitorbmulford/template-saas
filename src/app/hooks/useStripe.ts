@@ -13,7 +13,7 @@ export function useStripe() {
     }
     loadStripeAsync();
   }, []);
-  
+
   async function createPaymentStripeCheckout(checkoutData: {
     testeId: string;
     userEmail?: string;
@@ -60,15 +60,32 @@ export function useStripe() {
   }
 
   async function handleCreateStripePortal() {
-    const response = await fetch("/api/stripe/create-portal", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    window.location.href = data.url;
+    try {
+      const response = await fetch("/api/stripe/create-portal", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        console.error("Error from API:", data.error);
+        return;
+      }
+
+      if (!data.url) {
+        console.error("Portal URL not found in response");
+        return;
+      }
+
+      window.location.href = data.url;
+    } catch (error) {
+      console.error("Error creating portal session:", error);
+    }
   }
+
   return {
     createPaymentStripeCheckout,
     createSubscriptionStripeCheckout,

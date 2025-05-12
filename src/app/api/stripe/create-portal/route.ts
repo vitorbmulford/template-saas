@@ -1,41 +1,42 @@
-import { auth } from "@/app/lib/auth";
-import { db } from "@/app/lib/firebase";
+import { NextRequest, NextResponse } from "next/server";
 import stripe from "@/app/lib/stripe";
-import { NextResponse } from "next/server";
+import { auth } from "@/app/lib/auth";
+import { getOrCreateCustomer } from "@/app/server/stripe/get-customer-id";
 
-export async function POST(req: NextResponse) {
+export async function POST(req: NextRequest) {
   const session = await auth();
   const userId = session?.user?.id;
+  const userEmail = session?.user?.email;
 
-  if (!userId) {
-    return NextResponse.json({ eror: "unauthorized" }, { status: 401 });
+  if (!userId || !userEmail) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const customerId = await getOrCreateCustomer(userId, userEmail);
+
   try {
-    const userRef = db.collection("usser").doc(userId);
-    const userDoc = await userRef.get();
+    const portalSession = await stripe.billingPortal.sessions.create({
+      customer: customerId,
+      return_url: `${req.headers.get("origin")}/dashboard`, 
+    });
 
-    if (!userDoc) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    const costumerId = userDoc.data()?.stripeCustomerId;
-
-    if (!costumerId) {
+    if (!portalSession.url) {
       return NextResponse.json(
-        { error: "Costumer not found" },
-        { status: 404 }
+        { error: "Portal URL not found" },
+        { status: 500 }
       );
     }
 
-    const portalSessions = await stripe.billingPortal.sessions.create({
-      customer: costumerId,
-      return_url: `${req.headers.get("origin")}/dashboard`,
-    });
-
-    return NextResponse.json({ url: portalSessions }, { status: 200 });
+    return NextResponse.json({ url: portalSession.url });
   } catch (error) {
-    console.log(error);
-    return NextResponse.error();
+    if (error instanceof Error) {
+      console.error("Stripe error:", error.message);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    console.error("Unknown error:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
