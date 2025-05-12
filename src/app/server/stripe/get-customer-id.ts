@@ -31,7 +31,7 @@ export async function getOrCreateCustomer(userId: string, userEmail: string) {
       stripeCustomerId: stripeCustomer.id,
     });
 
-    return stripeCustomer.id; 
+    return stripeCustomer.id;
   } catch (error) {
     console.log(error);
     return null;

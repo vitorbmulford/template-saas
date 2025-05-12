@@ -13,6 +13,7 @@ export function useStripe() {
     }
     loadStripeAsync();
   }, []);
+  
   async function createPaymentStripeCheckout(checkoutData: {
     testeId: string;
     userEmail?: string;
