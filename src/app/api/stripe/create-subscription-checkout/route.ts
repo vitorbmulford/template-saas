@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
 
   const customerId = await getOrCreateCustomer(userId, userEmail);
 
-  const metadata = { testeId };
+  const metadata = { testeId, price, userId };
 
   try {
     const checkoutSession = await stripe.checkout.sessions.create({
